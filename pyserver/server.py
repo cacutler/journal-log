@@ -8,13 +8,13 @@ class MyFlask(Flask):
         return super().add_url_rule(rule, endpoint, view_func, provide_automatic_options=False, **options)
 def load_session_data():
     print("The cookies", request.cookies)
-    session_id = request.cookies.get("session_id") #load the session ID from cookie data
-    if session_id: #if session ID is present:
-        session_data = session_store.getSession(session_id) #load the session data using the session ID
-    if session_id == None or session_data == None: #if session ID is missing or invalid:
-        session_id = session_store.createSession() #create a new session and session ID
-        session_data = session_store.getSession(session_id) #load the session data using the new session ID
-    g.session_id = session_id #save the session ID and session data for use in other functions
+    session_id = request.cookies.get("session_id")
+    if session_id:
+        session_data = session_store.getSession(session_id)
+    if session_id == None or session_data == None:
+        session_id = session_store.createSession()
+        session_data = session_store.getSession(session_id)
+    g.session_id = session_id
     g.session_data = session_data
 app = MyFlask(__name__)
 @app.before_request
@@ -93,7 +93,7 @@ def create_in_journal_entries_collections():
     db.create_journal_entry(date, entry, author, mood, mood_scale)
     return "Created", 201
 @app.route("/users", methods=["POST"])
-def create_user(): #keep this function
+def create_user():
     db = Journal_EntriesDB()
     first_name = request.form["first_name"]
     last_name = request.form["last_name"]
@@ -106,32 +106,8 @@ def create_user(): #keep this function
         return "Created User", 201
     else:
         return "User already exists", 422
-#@app.route("/users", methods=["GET"])
-#def get_users(): #comment out or delete this function
-    #db = Journal_EntriesDB()
-    #users = db.get_users()
-    #return users
-#@app.route("/users/<int:user_id>", methods=["GET"])
-#def get_user(user_id): #comment out or delete this function
-    #print("retrieve user member with ID:", user_id)
-    #db = Journal_EntriesDB()
-    #user = db.get_user_with_id(user_id)
-    #if user:
-        #return user
-    #else:
-        #return "User with ID {} not found.".format(user_id), 404
-#@app.route("/users/<int:user_id>", methods=["DELETE"])
-#def delete_user(user_id): #comment out or delete this function
-    #print("delete user member with ID:", user_id)
-    #db = Journal_EntriesDB()
-    #journal_entry = db.get_user_with_id(user_id)
-    #if journal_entry:
-        #db.delete_user(user_id)
-        #return "Deleted", 200
-    #else:
-        #return "User with ID {} not found.".format(user_id), 404
 @app.route("/sessions", methods=["POST"])
-def login(): #keep with function; authenticate
+def login():
     email = request.form["email"]
     password = request.form["password"]
     db = Journal_EntriesDB()
