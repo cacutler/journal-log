@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="style.css">
+        <title>Journal Log</title>
+    </head>
+    <body>
+        <div id="modal-login">
+            <div id="login-front-cover">
+                <h1>Online Journal</h1>
+                <p>Please log in with your email and password and click the Log In button to use your online journal.  If you don't have an account, click the Sign Up button to create an account.</p>
+            </div>
+            <div id="log-in">
+                <input type="email" id="log-in-email" placeholder="Email">
+                <input type="password" id="log-in-password" placeholder="Password">
+            </div>
+            <div id="log-in-sign-up-buttons">
+                <button id="log-in-button">Log In</button>
+                <button id="sign-up-button">Sign Up</button>
+            </div>
+            <div>
+                <p id="log-in-response-message"></p>
+            </div>
+        </div>
+        <div id="modal-register">
+            <div id="register-front-cover">
+                <h1>Online Journal</h1>
+                <p>Please provide the necessary information and click the Create Account button to create an account.  If you already have an account, click the Sign In button to log in.</p>
+            </div>
+            <div id="register">
+                <input type="text" id="first-name" placeholder="First Name">
+                <input type="text" id="last-name" placeholder="Last Name">
+                <input type="email" id="register-email" placeholder="Email">
+                <input type="password" id="register-password" placeholder="Password">
+            </div>
+            <div id="create-account-sign-in-buttons">
+                <button id="create-account-button">Create Account</button>
+                <button id="sign-in-button">Sign In</button>
+            </div>
+            <div>
+                <p id="registration-response-message"></p>
+            </div>
+        </div>
+        <div id="modal-logged-in">
+            <div id="front-cover">
+                <h1>Online Journal</h1>
+                <p>Welcome to your online journal.</p>
+            </div>
+            <div>
+                <button id="log-out-button">Log Out</button>
+                <p id="log-out-message"></p>
+            </div>
+            <div id="new-entry">
+                <p>New Journal Entry</p>
+                <input type="text" id="journal-entry-date" placeholder="Date of Entry">
+                <input type="text" id="entry-author" placeholder="Author of Entry">
+                <input type="text" id="mood" placeholder="Mood">
+                <input type="number" id="mood-scale" placeholder="Mood Scale between 1 to 10">
+                <input type="text" id="journal-entry" placeholder="Entry">
+            </div>
+            <div id="add-button">
+                <button id="add-entry-button">Add Entry</button>
+            </div>
+            <div id="previous-entries">
+                <ul id="entries-list"></ul>
+            </div>
+            <div id="back-cover">
+                <h1>End of Journal</h1>
+            </div>
+        </div>
+        <script src="app.js"></script>
+    </body>
+</html>
