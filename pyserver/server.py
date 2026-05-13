@@ -16,7 +16,7 @@ def load_session_data():
         session_data = session_store.getSession(session_id)
     g.session_id = session_id
     g.session_data = session_data
-app = MyFlask(__name__)
+app = MyFlask(__name__, template_folder=os.path.join(BASE_DIR, "../pyclient"), static_folder=os.path.join(BASE_DIR, "../pyclient"))
 @app.before_request
 def before_request_func():
     load_session_data()
@@ -33,7 +33,7 @@ def cors_preflight(path):
     return "", 200, {"Access-Control-Allow-Headers":"Content-Type", "Access-Control-Allow-Methods":"GET, POST, DELETE, PUT, OPTIONS"}
 @app.route("/")
 def home():
-    return render_template("../pyclient/index.html")
+    return render_template("index.html")
 @app.route("/journal_entries", methods=["GET"])
 def retrieve_journal_entries_collection():
     if "user_id" not in g.session_data:
