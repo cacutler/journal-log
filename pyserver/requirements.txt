@@ -2,4 +2,3 @@ flask
 passlib
 bcrypt
 gunicorn
-os
