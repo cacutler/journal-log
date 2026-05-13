@@ -1,4 +1,4 @@
-from flask import Flask, request, g
+from flask import Flask, request, g, render_template
 from journal_entries_db import Journal_EntriesDB
 from passlib.hash import bcrypt
 from session_store import SessionStore
@@ -31,6 +31,9 @@ def after_request_func(response):
 @app.route("/<path:path>", methods=["OPTIONS"])
 def cors_preflight(path):
     return "", 200, {"Access-Control-Allow-Headers":"Content-Type", "Access-Control-Allow-Methods":"GET, POST, DELETE, PUT, OPTIONS"}
+@app.route("/")
+def home():
+    return render_template("../pyclient/index.html")
 @app.route("/journal_entries", methods=["GET"])
 def retrieve_journal_entries_collection():
     if "user_id" not in g.session_data:
