@@ -31,7 +31,7 @@ Attributes:
 CREATE TABLE journal_entries (id INTEGER PRIMARY KEY, date TEXT, entry TEXT, author TEXT, mood TEXT, mood_scale INTEGER);
 ```
 ```sql
-CREATE TABLE users ( id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, email TEXT, password TEXT);
+CREATE TABLE users (id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, email TEXT, password TEXT);
 ```
 
 ## REST Endpoints
