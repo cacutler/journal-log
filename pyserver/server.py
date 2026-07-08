@@ -16,7 +16,7 @@ def load_session_data():
         session_data = session_store.getSession(session_id)
     g.session_id = session_id
     g.session_data = session_data
-app = MyFlask(__name__, template_folder=os.path.join(BASE_DIR, "../pyclient"), static_folder=os.path.join(BASE_DIR, "../pyclient"))
+app = MyFlask(__name__)
 @app.before_request
 def before_request_func():
     load_session_data()
@@ -79,7 +79,7 @@ def edit_journal_entries_member(entry_id):
         db.update_journal_entry(date, entry, author, mood, mood_scale, entry_id)
         return "Updated", 200
     elif date == "" and entry == "" and author == "" and mood == "" and mood_scale == "":
-        return 204
+        return "", 204
     else:
         return "Journal entry with ID {} not found.".format(entry_id), 404
 @app.route("/journal_entries", methods=["POST"])
