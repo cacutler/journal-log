@@ -131,7 +131,8 @@ def logout():
         return "Unauthenticated", 401
     del g.session_data["user_id"]
     return "Deleted", 200
-def main():
+def main() -> None:
     app.run(port=8080)
+    return
 if __name__ == "__main__":
     main()
