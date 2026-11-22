@@ -4,7 +4,7 @@ import bcrypt
 from session_store import SessionStore
 session_store = SessionStore()
 class MyFlask(Flask):
-    def add_url_rule(self, rule, endpoint=None, view_func=None, **options):
+    def add_url_rule(self, rule, endpoint=None, view_func=None, **options) -> None:
         return super().add_url_rule(rule, endpoint, view_func, provide_automatic_options=False, **options)
 def load_session_data():
     print("The cookies", request.cookies)
@@ -29,17 +29,17 @@ def after_request_func(response):
     response.headers["Access-Control-Allow-Credentials"] = "true"
     return response
 @app.route("/<path:path>", methods=["OPTIONS"])
-def cors_preflight(path):
+def cors_preflight(path) -> tuple[str, int, dict[str, str]]:
     return "", 200, {"Access-Control-Allow-Headers":"Content-Type", "Access-Control-Allow-Methods":"GET, POST, DELETE, PUT, OPTIONS"}
 @app.route("/journal_entries", methods=["GET"])
-def retrieve_journal_entries_collection():
+def retrieve_journal_entries_collection() -> list | tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     db = Journal_EntriesDB()
     journal_entries = db.get_journal_entries()
     return journal_entries
 @app.route("/journal_entries/<int:entry_id>", methods=["GET"])
-def retrieve_journal_entries_member(entry_id):
+def retrieve_journal_entries_member(entry_id: int) -> tuple[str, int] | dict:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     print("retrieve journal entry member with ID:", entry_id)
@@ -50,7 +50,7 @@ def retrieve_journal_entries_member(entry_id):
     else:
         return "Journal entry with ID {} not found.".format(entry_id), 404
 @app.route("/journal_entries/<int:entry_id>", methods=["DELETE"])
-def delete_journal_entries_member(entry_id):
+def delete_journal_entries_member(entry_id: int) -> tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     print("delete journal entry member with ID:", entry_id)
@@ -62,7 +62,7 @@ def delete_journal_entries_member(entry_id):
     else:
         return "Journal entry with ID {} not found.".format(entry_id), 404
 @app.route("/journal_entries/<int:entry_id>", methods=["PUT"])
-def edit_journal_entries_member(entry_id):
+def edit_journal_entries_member(entry_id: int) -> tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     db = Journal_EntriesDB()
@@ -80,7 +80,7 @@ def edit_journal_entries_member(entry_id):
     else:
         return "Journal entry with ID {} not found.".format(entry_id), 404
 @app.route("/journal_entries", methods=["POST"])
-def create_in_journal_entries_collections():
+def create_in_journal_entries_collections() -> tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     print("the request data is:", request.form)
@@ -93,7 +93,7 @@ def create_in_journal_entries_collections():
     db.create_journal_entry(date, entry, author, mood, mood_scale)
     return "Created", 201
 @app.route("/users", methods=["POST"])
-def create_user():
+def create_user() -> tuple[str, int]:
     db = Journal_EntriesDB()
     first_name = request.form["first_name"]
     last_name = request.form["last_name"]
@@ -107,7 +107,7 @@ def create_user():
     else:
         return "User already exists", 422
 @app.route("/sessions", methods=["POST"])
-def login():
+def login() -> tuple[str, int]:
     email = request.form["email"]
     password = request.form["password"]
     db = Journal_EntriesDB()
@@ -123,7 +123,7 @@ def login():
     else:
         return "Unauthenticated", 401
 @app.route("/sessions", methods=["DELETE"])
-def logout():
+def logout() -> tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthenticated", 401
     del g.session_data["user_id"]
