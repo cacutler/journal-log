@@ -1,6 +1,6 @@
 from flask import Flask, request, g
 from journal_entries_db import Journal_EntriesDB
-from passlib.hash import bcrypt
+import bcrypt
 from session_store import SessionStore
 session_store = SessionStore()
 class MyFlask(Flask):
@@ -99,10 +99,10 @@ def create_user():
     last_name = request.form["last_name"]
     email = request.form["email"]
     password = request.form["password"]
-    h = bcrypt.hash(password)
+    h = bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())
     check = db.check_user(email)
     if check == None:
-        db.create_user(first_name, last_name, email, h)
+        db.create_user(first_name, last_name, email, h.decode("utf-8"))
         return "Created User", 201
     else:
         return "User already exists", 422
@@ -114,7 +114,7 @@ def login():
     check = db.check_user(email)
     if check:
         h = db.get_password(email)
-        pw_verify = bcrypt.verify(password, h["password"])
+        pw_verify = bcrypt.checkpw(password.encode("utf-8"), h["password"].encode("utf-8"))
         if pw_verify:
             g.session_data["user_id"] = check["id"]
             return "Session Created", 201
