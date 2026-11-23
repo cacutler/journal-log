@@ -11,15 +11,18 @@ This is a project I developed through most of my SE-3200 Web Application Develop
 **Journal Entry**
 
 Attributes:
+- id (integer)
 - date (string)
 - entry (string)
 - author (string)
 - mood (string)
 - mood scale (integer)
+- user id (integer)
 
 **User**
 
 Attributes:
+- id (integer)
 - First Name (string)
 - Last Name (string)
 - Email (string)
@@ -28,10 +31,8 @@ Attributes:
 ## Schemas
 
 ```sql
-CREATE TABLE journal_entries (id INTEGER PRIMARY KEY, date TEXT, entry TEXT, author TEXT, mood TEXT, mood_scale INTEGER);
-```
-```sql
 CREATE TABLE users (id INTEGER PRIMARY KEY, first_name TEXT, last_name TEXT, email TEXT, password TEXT);
+CREATE TABLE journal_entries (id INTEGER PRIMARY KEY, date TEXT, entry TEXT, author TEXT, mood TEXT, mood_scale INTEGER, user_id INTEGER REFERENCES users(id));
 ```
 
 ## REST Endpoints

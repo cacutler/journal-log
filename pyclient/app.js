@@ -28,6 +28,7 @@ addEntryButton.onclick = function () {
         }
     }).then(function (response) {
         console.log("journal entry was sent to server");
+        clearEntryInputs();
         loadDataFromServer();
     });
 };
@@ -77,11 +78,7 @@ function confirmUpdatedEntry(id) {
         }
     }).then(function (response) {
         console.log("journal entry was sent to server for update");
-        journalEntryDate.value = "";
-        journalEntry.value = "";
-        author.value = "";
-        mood.value = "";
-        mood_scale.value = "";
+        clearEntryInputs();
         loadDataFromServer();
     });
 };
@@ -263,4 +260,11 @@ function loadDataFromServer() {
         }
     });
 };
+function clearEntryInputs() {
+    journalEntryDate.value = "";
+    journalEntry.value = "";
+    author.value = "";
+    mood.value = "";
+    mood_scale.value = "";
+}
 loadDataFromServer();

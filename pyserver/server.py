@@ -35,16 +35,18 @@ def cors_preflight(path) -> tuple[str, int, dict[str, str]]:
 def retrieve_journal_entries_collection() -> list | tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
+    user_id = g.session_data["user_id"]
     db = Journal_EntriesDB()
-    journal_entries = db.get_journal_entries()
+    journal_entries = db.get_journal_entries(user_id)
     return journal_entries
 @app.route("/journal_entries/<int:entry_id>", methods=["GET"])
 def retrieve_journal_entries_member(entry_id: int) -> tuple[str, int] | dict:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     print("retrieve journal entry member with ID:", entry_id)
+    user_id = g.session_data["user_id"]
     db = Journal_EntriesDB()
-    journal_entry = db.get_journal_entry(entry_id)
+    journal_entry = db.get_journal_entry(entry_id, user_id)
     if journal_entry:
         return journal_entry
     else:
@@ -54,10 +56,9 @@ def delete_journal_entries_member(entry_id: int) -> tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
     print("delete journal entry member with ID:", entry_id)
+    user_id = g.session_data["user_id"]
     db = Journal_EntriesDB()
-    journal_entry = db.get_journal_entry(entry_id)
-    if journal_entry:
-        db.delete_journal_entry(entry_id)
+    if db.delete_journal_entry(entry_id, user_id):
         return "Deleted", 200
     else:
         return "Journal entry with ID {} not found.".format(entry_id), 404
@@ -65,16 +66,18 @@ def delete_journal_entries_member(entry_id: int) -> tuple[str, int]:
 def edit_journal_entries_member(entry_id: int) -> tuple[str, int]:
     if "user_id" not in g.session_data:
         return "Unauthorized", 401
+    user_id = g.session_data["user_id"]
     db = Journal_EntriesDB()
-    journal_entry = db.get_journal_entry(entry_id)
+    journal_entry = db.get_journal_entry(entry_id, user_id)
     date = request.form["date"]
     entry = request.form["entry"]
     author = request.form["author"]
     mood = request.form["mood"]
     mood_scale = request.form["mood_scale"]
     if journal_entry:
-        db.update_journal_entry(date, entry, author, mood, mood_scale, entry_id)
-        return "Updated", 200
+        if db.update_journal_entry(date, entry, author, mood, mood_scale, entry_id, user_id):
+            return "Updated", 200
+        return "Journal entry with ID {} not found.".format(entry_id), 404
     elif date == "" and entry == "" and author == "" and mood == "" and mood_scale == "":
         return "", 204
     else:
@@ -90,7 +93,8 @@ def create_in_journal_entries_collections() -> tuple[str, int]:
     author = request.form["author"]
     mood = request.form["mood"]
     mood_scale = request.form["mood_scale"]
-    db.create_journal_entry(date, entry, author, mood, mood_scale)
+    user_id = g.session_data["user_id"]
+    db.create_journal_entry(date, entry, author, mood, mood_scale, user_id)
     return "Created", 201
 @app.route("/users", methods=["POST"])
 def create_user() -> tuple[str, int]:
